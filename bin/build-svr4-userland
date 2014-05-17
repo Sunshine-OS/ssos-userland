@@ -50,7 +50,7 @@ do_getopts $*
 shift `expr $optind - 1`
 
 
-export gatepath="${MOZILLA_WS}components/${COMPONENT}"
+export gatepath="${USERLAND_WS}components/${COMPONENT}"
 
 cflags_debug=" -g -O0 "
 
