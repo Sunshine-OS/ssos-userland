@@ -4,3 +4,4 @@ bin/build-svr4-userland
 bin/build-heirloom-sh
 bin/build-pkg-gate
 bin/build-svr4-dev
+bin/build-runit
