@@ -1,2 +1,2 @@
 all:
-	USERLAND_WS=`pwd`
+	USERLAND_WS=`pwd` bin/buildall
