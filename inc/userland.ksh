@@ -26,7 +26,7 @@
 #
 
 all_gates="comm-release"
-BUILD="1"
+BUILD="2"
 
 err() 
 {
