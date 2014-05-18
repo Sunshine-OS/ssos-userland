@@ -64,6 +64,7 @@ buildit()
 {
 
 	msg "making ${COMPONENT}"
+	echo "#define VERSCODE \"Sunshine-runit v2.1.5_${BUILD}\"" > $fullpath/src/version.h
 	cd $fullpath && package/compile
 
 	msg "packaging ${COMPONENT}"
@@ -72,6 +73,7 @@ buildit()
 	cd $fullpath && ./packageit
 	cd $fullpath && pkgtrans . SSOSrunit.pkg SSOSrunit
 	rm -f pkginfo
+	rm -f src/version.h
 	mv SSOSrunit.pkg $USERLAND_WS$pkgdir
 }
 
