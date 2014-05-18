@@ -70,9 +70,9 @@ buildit()
 	msg "packaging ${COMPONENT}"
 	rm -f pkginfo
 	cd $gatepath && eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
-	make SSOSheirloom-sh.pkg
-
-	mv SSOSheirloom-sh.pkg $USERLAND_WS$pkgdir
+	make SSOShlmsh.pkg
+	rm -f pkginfo
+	mv SSOShlmsh.pkg $USERLAND_WS$pkgdir
 }
 
 buildit

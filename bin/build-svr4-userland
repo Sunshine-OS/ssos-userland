@@ -72,9 +72,9 @@ build_svr4_userland()
 	msg "packaging ${COMPONENT}"
 	rm -f pkginfo
 	cd $gatepath && eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
-	make SSOSsysvcmds.pkg
-
-	mv SSOSsysvcmds.pkg $USERLAND_WS$pkgdir
+	make SSOSsvcmd.pkg
+	rm -f pkginfo
+	mv SSOSsvcmd.pkg $USERLAND_WS$pkgdir
 }
 
 build_svr4_userland

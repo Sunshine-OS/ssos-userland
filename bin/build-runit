@@ -71,6 +71,7 @@ buildit()
 	cd $fullpath && eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
 	cd $fullpath && ./packageit
 	cd $fullpath && pkgtrans . SSOSrunit.pkg SSOSrunit
+	rm -f pkginfo
 	mv SSOSrunit.pkg $USERLAND_WS$pkgdir
 }
 
