@@ -13,3 +13,6 @@
 [submodule "components/runit"]
 	path = components/runit
 	url = git@github.com:Sunshine-OS/runit.git
+[submodule "components/freebsd"]
+	path = components/freebsd
+	url = git@github.com:Sunshine-OS/freebsd.git

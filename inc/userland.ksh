@@ -42,7 +42,10 @@ derr()
 
 msg() 
 {
+	echo "--"
 	echo "---- $@ ----"
+	echo "--"
+	echo ""
 }
 
 warn() 
@@ -80,6 +83,7 @@ init_build()
 	fi
 
 	export PATH=/usr/5bin:/usr/ccs:/usr/bin/:/bin:/usr/sbin:/usr/local/bin
+	export BSDMAKE=/usr/bin/make
 	export MAKE=/usr/local/bin/gmake
 	export PYTHON=/usr/local/bin/python2.7
 
@@ -186,13 +190,22 @@ configureit()
 	$gatepath/configure $CONFFLAGS
 }
 
-packageit()
+packageit1()
 {
-	msg "packaging ${COMPONENT}"
-	cd ${USERLAND_WS}misc/pkg/${COMPONENT}
-	mkdir -p ${USERLAND_WS}packages
-	pkgmk -o -b ${USERLAND_WS}${staging} -f proto -d ${USERLAND_WS}packages
+	apnd=$1
+	comp=$2
+	msg "packaging ${comp}"
+	cd ${USERLAND_WS}misc/pkg/${comp}
+	mkdir -p ${USERLAND_WS}pkg
+	pkgproto ${USERLAND_WS}${staging}/${apnd} > proto
+	PKGPROTOFILE=${USERLAND_WS}misc/pkg/${comp}/proto
 }	 
+
+packageit2()
+{
+	cd ${USERLAND_WS}misc/pkg/${comp}
+	pkgmk -o -b ${USERLAND_WS}${staging}/${apnd} -f proto -d ${USERLAND_WS}pkg
+}
 
 if [ -d "${USERLAND_WS}" ] ; then
 	export USERLAND_WS=${USERLAND_WS}/
