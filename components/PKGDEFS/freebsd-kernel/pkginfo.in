@@ -1,0 +1,8 @@
+PKG=FBSDkrnl
+NAME=FreeBSD Kernel
+DESC=The FreeBSD Kernel and core modules
+VENDOR=FreeBSD
+VERSION=11.0_%BUILD
+ARCH=x86_64
+CATEGORY=system
+BASEDIR=/

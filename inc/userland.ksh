@@ -192,19 +192,21 @@ configureit()
 
 packageit1()
 {
-	apnd=$1
-	comp=$2
+	comp=$1
 	msg "packaging ${comp}"
-	cd ${USERLAND_WS}misc/pkg/${comp}
+	cd ${USERLAND_WS}/components/PKGDEFS/${comp}
 	mkdir -p ${USERLAND_WS}pkg
-	pkgproto ${USERLAND_WS}${staging}/${apnd} > proto
-	PKGPROTOFILE=${USERLAND_WS}misc/pkg/${comp}/proto
+	pkgproto ${USERLAND_WS}${staging}/${comp}= > proto
+	PKGPROTOFILE=${USERLAND_WS}components/PKGDEFS/${comp}/proto
+	echo "i pkginfo" >> $PKGPROTOFILE
 }	 
 
 packageit2()
 {
-	cd ${USERLAND_WS}misc/pkg/${comp}
-	pkgmk -o -b ${USERLAND_WS}${staging}/${apnd} -f proto -d ${USERLAND_WS}pkg
+	comp=$1
+	cd ${USERLAND_WS}components/PKGDEFS/${comp}
+	eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
+	pkgmk -o -b ${USERLAND_WS}${staging}${comp} -f proto -d ${USERLAND_WS}pkg
 }
 
 if [ -d "${USERLAND_WS}" ] ; then

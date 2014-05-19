@@ -1,0 +1,124 @@
+#!/bin/sh
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+
+#
+# Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
+# Copyright 2014 David Mackay.  All rights reserved.
+# Use is subject to license terms.
+#
+
+set -e
+
+COMPONENT="freebsd"
+
+usage() 
+{
+	echo "usage: build-${COMPONENT} [-s] [debug|nondebug]" >&2
+	exit 1
+}
+
+[ "$1" = "-h" ] && usage
+[ "$1" = "-?" ] && usage
+
+if echo $0 | grep ^/ 2>&1 > /dev/null ; then
+	dir=$(dirname $0)
+else
+	dir=$PWD/$(dirname $0)
+fi
+. $dir/../inc/userland.ksh
+
+do_getopts $*
+shift `expr $optind - 1`
+
+export gatepath="${USERLAND_WS}components/${COMPONENT}"
+
+msg "building ${COMPONENT}"
+
+init_build $1
+
+export lib32dir="${USERLAND_WS}${staging}/freebsd-lib32"
+export worlddir="${USERLAND_WS}${staging}/freebsd-world"
+export kerndir="${USERLAND_WS}${staging}/freebsd-kernel"
+
+makeflags="KERNCONF=VT NOCLEAN=YES NO_FSCHG=YES WITHOUT_KERNEL_SYMBOLS=yes"
+
+export MAKEOBJDIRPREFIX="${USERLAND_WS}${objdir}"
+
+[ -n "$skip_prepare" ] || msg "cleaning ${objdir}"
+[ -n "$skip_prepare" ] || rm -rf $worlddir $lib32dir $kerndir
+[ -n "$skip_prepare" ] || rm -rf $objdir
+
+build_freebsd()
+{
+
+	msg "making ${COMPONENT}"
+	cd $gatepath
+
+	msg "make kernel-toolchain"
+	env $makeenv $BSDMAKE -j16 $makeflags kernel-toolchain || return 1
+	msg "make buildkernel"
+	env $makeenv $BSDMAKE -j16 $makeflags buildkernel || return 1
+	msg "make buildworld"
+	env $makeenv $BSDMAKE -j16 $makeflags buildworld|| return 1
+}
+
+stage_freebsd()
+{
+	mkdir -p $staging
+
+	msg "staging ${COMPONENT}"
+	
+	cd $gatepath
+
+	msg "stage kernel"
+	env DESTDIR="${USERLAND_WS}${staging}/freebsd-kernel" \
+	   $makeenv $BSDMAKE $makeflags installkernel
+
+	msg "stage world"
+	mkdir -p $worlddir 
+	env DESTDIR="$worlddir" \
+	   $makeenv $BSDMAKE $makeflags -DWITHOUT_LIB32 installworld distribution
+
+	msg "stage lib32"
+	mkdir -p $lib32dir
+	install -dm755 "${lib32dir}"/usr/lib32
+	install -dm755 "${lib32dir}"/usr/libdata
+	install -dm755 "${lib32dir}"/usr/libexec
+	install -dm755 "${lib32dir}"/usr/bin
+	install -dm755 "${lib32dir}"/usr/lib32/i18n
+	install -dm755 "${lib32dir}"/usr/lib32/private
+	install -dm755 "${lib32dir}"/libexec/
+	install -dm755 "${lib32dir}"/usr/libdata/pkgconfig
+
+	env DESTDIR="${lib32dir}" \
+	   $makeenv $BSDMAKE $makeflags install32
+}
+
+package_freebsd()
+{
+	packageit1 freebsd-kernel
+	packageit2 freebsd-kernel
+}
+
+build_freebsd || exit 1 
+stage_freebsd
+package_freebsd
