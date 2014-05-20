@@ -1,0 +1,16 @@
+# This package provides some files used by any FreeBSD/Sunshine system
+# This allows `pkgrm FBSDworld` to work (without trying to eliminate key
+# files and folders)
+i pkginfo
+d none var 0755 root wheel
+d none var/spool 0755 root wheel
+d none var/spool/clientmqueue 0770 smmsp smmsp
+d none var/spool/lock 0775 uucp dialer
+d none var/tmp 1777 root wheel
+d none var/run 0755 root wheel
+d none var/msgs 0755 daemon wheel
+d none usr 0755 root wheel
+d none usr/lib 0755 root wheel
+d none tmp 1777 root wheel
+d none etc 0755 root wheel
+d none etc/mail 0755 root wheel

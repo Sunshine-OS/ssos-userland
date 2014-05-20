@@ -131,12 +131,21 @@ package_freebsd()
 	packageit1 freebsd-lib32
 	packageit2 freebsd-lib32
 
+	msg "package SSOSbdirs"
+	cd ${USERLAND_WS}/components/PKGDEFS/base-dirs
+	eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
+	pkgmk -o -b ${USERLAND_WS}${staging}/${freebsd-world} \
+	  -f proto -d ${USERLAND_WS}pkg
+	rm -f pkginfo
+
 	pkgtrans -s ${USERLAND_WS}pkg ${USERLAND_WS}pkg/FBSDkrnl.pkg \
 	  FBSDkrnl && rm -rf ${USERLAND_WS}pkg/FBSDkrnl
 	pkgtrans -s ${USERLAND_WS}pkg ${USERLAND_WS}pkg/FBSDworld.pkg \
 	  FBSDworld && rm -rf ${USERLAND_WS}pkg/FBSDworld
 	pkgtrans -s ${USERLAND_WS}pkg ${USERLAND_WS}pkg/FBSDlib32.pkg \
 	  FBSDlib32 && rm -rf ${USERLAND_WS}pkg/FBSDlib32
+	pkgtrans -s ${USERLAND_WS}pkg ${USERLAND_WS}pkg/SSOSbdirs.pkg \
+	  SSOSbdirs && rm -rf ${USERLAND_WS}pkg/SSOSbdirs
 }
 
 [ -n "$skip_build" ] || (build_freebsd || exit 1) 

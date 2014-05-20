@@ -1,0 +1,8 @@
+PKG=SSOSbdirs
+NAME=Sunshine Base Directories
+DESC=The Sunshine base directories. This is used to allow `pkgrm` of FBSDworld.
+VENDOR=Sunshine
+VERSION=0.9_%BUILD
+ARCH=x86_64
+CATEGORY=system
+BASEDIR=/
