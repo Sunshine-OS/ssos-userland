@@ -32,7 +32,7 @@ COMPONENT="freebsd"
 
 usage() 
 {
-	echo "usage: build-${COMPONENT} [-s] [debug|nondebug]" >&2
+	echo "usage: build-${COMPONENT} [-s] [-p] [debug|nondebug]" >&2
 	exit 1
 }
 
@@ -91,12 +91,12 @@ stage_freebsd()
 
 	msg "stage kernel"
 	env DESTDIR="${USERLAND_WS}${staging}/freebsd-kernel" \
-	   $makeenv $BSDMAKE $makeflags installkernel
+	  $makeenv $BSDMAKE $makeflags installkernel
 
 	msg "stage world"
 	mkdir -p $worlddir 
 	env DESTDIR="$worlddir" \
-	   $makeenv $BSDMAKE $makeflags -DWITHOUT_LIB32 installworld distribution
+	  $makeenv $BSDMAKE $makeflags -DWITHOUT_LIB32 installworld distribution
 
 	msg "stage lib32"
 	mkdir -p $lib32dir
@@ -110,15 +110,35 @@ stage_freebsd()
 	install -dm755 "${lib32dir}"/usr/libdata/pkgconfig
 
 	env DESTDIR="${lib32dir}" \
-	   $makeenv $BSDMAKE $makeflags install32
+	  $makeenv $BSDMAKE $makeflags install32
 }
 
 package_freebsd()
 {
+	msg "package kernel"
 	packageit1 freebsd-kernel
 	packageit2 freebsd-kernel
+
+	msg "package world"
+	rm -f "${worlddir}"/sbin/init
+	rm -f "${worlddir}"/usr/sbin/freebsd-update
+	rm -rf "${worlddir}"/usr/lib32/dtrace
+	packageit1 freebsd-world
+	packageit2 freebsd-world
+
+	msg "package lib32"
+	rm -f "${lib32dir}"/usr/libdata/pkgconfig/libusb*.pc
+	packageit1 freebsd-lib32
+	packageit2 freebsd-lib32
+
+	pkgtrans -s ${USERLAND_WS}pkg ${USERLAND_WS}pkg/FBSDkrnl.pkg \
+	  FBSDkrnl && rm -rf ${USERLAND_WS}pkg/FBSDkrnl
+	pkgtrans -s ${USERLAND_WS}pkg ${USERLAND_WS}pkg/FBSDworld.pkg \
+	  FBSDworld && rm -rf ${USERLAND_WS}pkg/FBSDworld
+	pkgtrans -s ${USERLAND_WS}pkg ${USERLAND_WS}pkg/FBSDlib32.pkg \
+	  FBSDlib32 && rm -rf ${USERLAND_WS}pkg/FBSDlib32
 }
 
-build_freebsd || exit 1 
-stage_freebsd
-package_freebsd
+[ -n "$skip_build" ] || (build_freebsd || exit 1) 
+[ -n "$skip_stage" ] || stage_freebsd
+[ -n "$skip_package" ] || package_freebsd

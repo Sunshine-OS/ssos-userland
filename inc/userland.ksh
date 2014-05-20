@@ -126,14 +126,20 @@ do_getopts()
 	skip_prepare=""
 	incremental=""
 
-	while getopts m:is name
+	while getopts m:isSpb name
 	do
 	case $name in
 	i) incremental="-i"
-		                 skip_prepare="-s"
-	;;
-		                s) skip_prepare="-s"
-	;;
+	  skip_prepare="-s" 
+	  ;;
+	s) skip_prepare="-s"
+	  ;;
+	p) skip_package="-p"
+	  ;;
+	S) skip_stage="-S"
+	  ;;
+	b) skip_build="-b"
+	  ;;
 	?) usage
 	;;
 	esac
@@ -142,6 +148,9 @@ do_getopts()
 	optind=$OPTIND
 
 	export skip_prepare
+	export skip_build
+	export skip_stage
+	export skip_package
 	export incremental
 	export optind
 }
@@ -207,6 +216,7 @@ packageit2()
 	cd ${USERLAND_WS}components/PKGDEFS/${comp}
 	eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
 	pkgmk -o -b ${USERLAND_WS}${staging}${comp} -f proto -d ${USERLAND_WS}pkg
+	rm -f pkginfo proto
 }
 
 if [ -d "${USERLAND_WS}" ] ; then

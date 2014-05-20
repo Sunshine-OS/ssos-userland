@@ -1,0 +1,8 @@
+PKG=FBSDworld
+NAME=FreeBSD World
+DESC=The FreeBSD Userland
+VENDOR=FreeBSD
+VERSION=11.0_%BUILD
+ARCH=x86_64
+CATEGORY=system
+BASEDIR=/

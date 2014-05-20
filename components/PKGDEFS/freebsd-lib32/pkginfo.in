@@ -1,0 +1,8 @@
+PKG=FBSDlib32
+NAME=FreeBSD 32-bit Libraries
+DESC=The FreeBSD 32-bit compatibility libraries
+VENDOR=FreeBSD
+VERSION=11.0_%BUILD
+ARCH=x86_64
+CATEGORY=system
+BASEDIR=/
