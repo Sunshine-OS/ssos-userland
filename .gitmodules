@@ -1,18 +1,19 @@
 [submodule "components/heirloom-sh"]
-	path = components/heirloom-sh
-	url = git@github.com:Sunshine-OS/heirloom-sh.git
+        path = components/heirloom-sh
+        url = git://github.com/Sunshine-OS/heirloom-sh.git
 [submodule "components/svr4-dev"]
-	path = components/svr4-dev
-	url = git@github.com:Sunshine-OS/svr4-dev.git
+        path = components/svr4-dev
+        url = git://github.com/Sunshine-OS/svr4-dev.git
 [submodule "components/svr4-userland"]
-	path = components/svr4-userland
-	url = git@github.com:Sunshine-OS/svr4-userland.git
+        path = components/svr4-userland
+        url = git://github.com/Sunshine-OS/svr4-userland.git
 [submodule "components/pkg-gate"]
-	path = components/pkg-gate
-	url = git@github.com:Sunshine-OS/pkg-gate.git
+        path = components/pkg-gate
+        url = git://github.com/Sunshine-OS/pkg-gate.git
 [submodule "components/runit"]
-	path = components/runit
-	url = git@github.com:Sunshine-OS/runit.git
+        path = components/runit
+        url = git://github.com/Sunshine-OS/runit.git
 [submodule "components/freebsd"]
-	path = components/freebsd
-	url = git@github.com:Sunshine-OS/freebsd.git
+        path = components/freebsd
+        url = git://github.com/Sunshine-OS/freebsd.git
+
