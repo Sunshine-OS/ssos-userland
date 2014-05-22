@@ -19,8 +19,6 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2014 The Sunshine OS Project. All rights reserved.
-# Portions Copyright (c) 2010, 2013, 
-# Oracle and/or its affiliates. All rights reserved.
 #
 
 export PATH=/usr/5bin:/usr/ccs/bin:/usr/local/bin::/usr/bin/:/usr/sbin:/sbin:/bin
