@@ -51,7 +51,7 @@ shift `expr $optind - 1`
 
 
 export gatepath="${USERLAND_WS}components/${COMPONENT}"
-export fullpath="${gatepath}/admin/runit-2.1.1"
+export fullpath="${gatepath}"
 
 cflags_debug=" -g -O0 "
 
@@ -68,10 +68,11 @@ buildit()
 	cd $fullpath && package/compile
 
 	msg "packaging ${COMPONENT}"
-	cd $fullpath && rm -f pkginfo
-	cd $fullpath && eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
-	cd $fullpath && ./packageit
-	cd $fullpath && pkgtrans . SSOSrunit.pkg SSOSrunit
+	cd $fullpath 
+	rm -f pkginfo
+	eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
+	./packageit
+	pkgtrans . SSOSrunit.pkg SSOSrunit
 	rm -f pkginfo
 	rm -f src/version.h
 	mv SSOSrunit.pkg $USERLAND_WS$pkgdir
