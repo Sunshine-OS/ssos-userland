@@ -188,14 +188,6 @@ autogen()
 	fi
 }
 
-configureit()
-{
-	mkdir -p $objdir
-	cd $objdir
-	msg "configuring ${COMPONENT}"
-	$gatepath/configure $CONFFLAGS
-}
-
 packageit1()
 {
 	comp=$1

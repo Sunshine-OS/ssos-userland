@@ -9,7 +9,11 @@ COMPONENT_URL=http://ftp.gnu.org/pub/gnu/gettext/$COMPONENT_ARCHIVE
 source $USERLAND_WS/inc/userland.ksh
 source $USERLAND_WS/inc/defs.ksh
 source $USERLAND_WS/inc/prepare.ksh
+source $USERLAND_WS/inc/configure.ksh
 
 downloadit
 extractit
 patchit
+configureit
+makeit
+installit
