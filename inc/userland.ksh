@@ -30,7 +30,7 @@ BUILD="2"
 
 err() 
 {
-	echo "$@" >&2
+	echo "!!!! $@" >&2
 	exit 1
 }
 
@@ -42,10 +42,7 @@ derr()
 
 msg() 
 {
-	echo "--"
-	echo "---- $@ ----"
-	echo "--"
-	echo ""
+	echo "---- $@"
 }
 
 warn() 
