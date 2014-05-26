@@ -85,5 +85,6 @@ PROTOGNULIBDIR=$PROTO_DIR/usr/gnu/lib
 BSDMAKE=/usr/bin/make
 GMAKE=/usr/local/bin/gmake
 PYTHON27=/usr/local/bin/python2.7
+SEDINPLACE="/usr/bin/sed -i ''"
 
 

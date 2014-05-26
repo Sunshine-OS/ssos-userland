@@ -1,0 +1,9 @@
+PKG=%NAME
+NAME=GNU Gettext library
+DESC=An internationalisation library created by the GNU Project. 
+VENDOR=The Free Software Foundation
+HOTLINE=https://www.gnu.org/software/gettext/
+VERSION=%VER_%BUILD
+ARCH=%MACH
+CATEGORY=system
+BASEDIR=/
