@@ -11,13 +11,19 @@ genpkginfo ()
 
 genpkgproto ()
 {
-	rm pkgproto
+	rm -f pkgproto
+	msg "generating pkgproto"
 	(cd $PROTO_DIR && find . -print | pkgproto) | >>pkgproto sed 's:^\([df] [^ ]* [^ ]* [^ ]*\) .*:\1 root wheel:; s:^f\( [^ ]* etc/\):v \1:; s:^f\( [^ ]* var/\):v \1:; s:^\(s [^ ]* [^ ]*=\)\([^/]\):\1./\2:'
 }
 
 genpkg ()
 {
-	echo "i pkginfo" >> pkgproto
+	if [ ! "$COMPONENT_NOGENPKGPROTO" -eq 1 ]; then
+		genpkgproto
+		echo "i pkginfo" >> pkgproto
+	fi
+
+	rm -rf /var/tmp/$COMPONENT_PKGNAME
 	pkgmk -a $MACH -d $PKGTEMP -r $PROTO_DIR -f pkgproto
 	mkdir -p $WS_PKG
 	pkgtrans -o -s $PKGTEMP $WS_PKG/$COMPONENT_PKGNAME.pkg $COMPONENT_PKGNAME

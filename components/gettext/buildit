@@ -20,5 +20,4 @@ configureit
 makeit
 installit
 genpkginfo
-genpkgproto
 genpkg
