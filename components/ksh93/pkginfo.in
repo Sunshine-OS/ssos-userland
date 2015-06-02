@@ -1,0 +1,9 @@
+PKG=%NAME
+NAME=Ksh93
+DESC=The AT&T K Shell 
+VENDOR=The Free Software Foundation
+HOTLINE=https://www.gnu.org/software/gettext/
+VERSION=%VER_%BUILD
+ARCH=%MACH
+CATEGORY=system
+BASEDIR=/

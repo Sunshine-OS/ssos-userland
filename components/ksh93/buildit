@@ -1,0 +1,51 @@
+#!/usr/bin/env ksh93
+
+COMPONENT=ksh93
+
+#ATT_USERNAME= "I accept www.opensource.org/licenses/cpl"
+#ATT_PASSWD= "."
+
+FETCH_ENV="HTTP_AUTH='basic:*:I accept www.opensource.org/licenses/cpl:.'"
+
+COMPONENT_SRCNAME=INIT
+COMPONENT_VERSION=2013-05-24
+COMPONENT_SRCS=$COMPONENT_SRCNAME.$COMPONENT_VERSION
+COMPONENT_ARCHIVE=$COMPONENT_SRCS.tgz
+COMPONENT_URL=http://www2.research.att.com/~astopen/download/tgz/$COMPONENT_ARCHIVE
+COMPONENT_PKGNAME="ASTksh93"
+
+COMPONENT_NOGENPKGPROTO=1
+
+UNPACK_FLAGS="-C $COMPONENT_SRCS"
+
+EXTRA_ARCHIVES_NUM=1
+
+COMPONENT_EXTRA_SRCNAME[1]=ast-base
+COMPONENT_EXTRA_VERSION[1]=2012-08-01
+COMPONENT_EXTRA_SRCS[1]=${COMPONENT_EXTRA_SRCNAME[1]}.${COMPONENT_EXTRA_VERSION[1]}
+COMPONENT_EXTRA_ARCHIVE[1]=${COMPONENT_EXTRA_SRCS[1]}.tgz
+COMPONENT_EXTRA_URL[1]=http://www2.research.att.com/~astopen/download/tgz/${COMPONENT_EXTRA_ARCHIVE[1]}
+EXTRA_UNPACK_FLAGS[1]="-C ${COMPONENT_EXTRA_SRCS[1]}"
+
+COMPONENT_INSTALL_PACKAGES=ast-base
+
+LDFLAGS+=" -lm"; export LDFLAGS
+
+source $USERLAND_WS/inc/userland.ksh 2>/dev/null || \
+  ( echo \$USERLAND_WS is not set && exit 1 )
+
+source $USERLAND_WS/inc/defs.ksh
+source $USERLAND_WS/inc/prepare.ksh
+source $USERLAND_WS/inc/attpackage.ksh
+source $USERLAND_WS/inc/spkg.ksh
+
+do_getopts $1 $2 $3
+
+downloadit
+extractit
+#cp -r ${COMPONENT_EXTRA_SRCS[1]}/* $COMPONENT_SRCS
+
+patchit
+makeit
+installit
+buildpkg

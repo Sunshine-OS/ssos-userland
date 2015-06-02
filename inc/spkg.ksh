@@ -1,8 +1,21 @@
 PKGTEMP=/var/tmp
 
+buildpkg ()
+{
+	if [ ! -f $BUILD_DIR/.packaged ]; then
+		genpkginfo
+		genpkg
+		touch $BUILD_DIR/.packaged
+	else
+		msg "already packaged, skipping"
+	fi
+}
+
 genpkginfo ()
 {
+	cd $COMPONENT_DIR
 	cp pkginfo.in pkginfo
+	msg "generating pkginfo"
 	eval "${SEDINPLACE} 's/%NAME/${COMPONENT_PKGNAME}/g' pkginfo"
 	eval "${SEDINPLACE} 's/%VER/${COMPONENT_VERSION}/g' pkginfo"
 	eval "${SEDINPLACE} 's/%MACH/${MACH}/g' pkginfo"
@@ -24,7 +37,8 @@ genpkg ()
 	fi
 
 	rm -rf /var/tmp/$COMPONENT_PKGNAME
-	pkgmk -a $MACH -d $PKGTEMP -r $PROTO_DIR -f pkgproto
+	msg "generating ${COMPONENT_PKGNAME}.pkg"
+	pkgmk -a $MACH -d $PKGTEMP -r $PROTO_DIR -f pkgproto || err "pkgmk fail"
 	mkdir -p $WS_PKG
 	pkgtrans -o -s $PKGTEMP $WS_PKG/$COMPONENT_PKGNAME.pkg $COMPONENT_PKGNAME
 }

@@ -7,17 +7,22 @@ COMPONENT_ARCHIVE=$COMPONENT_SRCS.tar.gz
 COMPONENT_URL=http://ftp.gnu.org/pub/gnu/gettext/$COMPONENT_ARCHIVE
 COMPONENT_PKGNAME="GNUgettxt"
 
-source $USERLAND_WS/inc/userland.ksh
+source $USERLAND_WS/inc/userland.ksh 2>/dev/null || \
+  ( echo \$USERLAND_WS is not set && exit 1 )
+
 source $USERLAND_WS/inc/defs.ksh
 source $USERLAND_WS/inc/prepare.ksh
 source $USERLAND_WS/inc/configure.ksh
 source $USERLAND_WS/inc/spkg.ksh
 
+do_getopts $1 $2 $3
+
 downloadit
 extractit
 patchit
+
+CONFIGURE_ARGS=" --prefix=/usr/gnu"
 configureit
 makeit
 installit
-genpkginfo
-genpkg
+buildpkg

@@ -82,6 +82,8 @@ PROTOGNUBINDIR=$PROTO_DIR/usr/gnu/bin
 PROTOGNUSBINDIR=$PROTO_DIR/usr/gnu/sbin
 PROTOGNULIBDIR=$PROTO_DIR/usr/gnu/lib
 
+CLONEY=$USERLAND_WS/bin/cloney
+
 BSDMAKE=/usr/bin/make
 GMAKE=/usr/local/bin/gmake
 PYTHON27=/usr/local/bin/python2.7

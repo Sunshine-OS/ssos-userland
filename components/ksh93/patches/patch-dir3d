@@ -1,0 +1,20 @@
+--- src/cmd/3d/dir3d.orig	2012-01-12 15:40:22.000000000 +0800
++++ src/cmd/3d/dir3d.c		2014-07-18 16:47:21.847707041 +0100
+@@ -299,7 +299,7 @@
+ 	seekdir(dirp, 0L);
+ }
+ 
+-#if !_nosys_readdir64
++#if !_nosys_readdir64 && defined(use_readdir64)
+ 
+ struct dirent64*
+ readdir643d(register DIR* dirp)
+@@ -483,7 +483,7 @@
+ #include "telldir.c"
+ #include "seekdir.c"
+ 
+-#if !_nosys_readdir64
++#if !_nosys_readdir64 && defined(use_readdir64)
+ 
+ #undef	dirent
+ #define dirent		dirent64

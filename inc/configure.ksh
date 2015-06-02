@@ -5,7 +5,7 @@ configureit ()
 		mkdir -p $BUILD_DIR
 		msg "configuring $COMPONENT:"
 		cd $BUILD_DIR
-		$CONFIGURE_SCRIPT || err "configure failed"
+		$CONFIGURE_SCRIPT $CONFIGURE_ARGS || err "configure failed"
 		touch $BUILD_DIR/.configured
 	else
 		msg "already configured, skipping"

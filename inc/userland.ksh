@@ -25,8 +25,7 @@
 # Use is subject to license terms.
 #
 
-all_gates="comm-release"
-BUILD="5"
+BUILD="9"
 
 err() 
 {
@@ -42,7 +41,7 @@ derr()
 
 msg() 
 {
-	echo "---- $@"
+	echo "---> $@"
 }
 
 warn() 
@@ -113,43 +112,29 @@ init_build()
 
 	mkdir -p $USERLAND_WS$pkgdir
 
-	msg "staging dir: ${staging}"
-
 }
 
 
 do_getopts() 
 {
-	skip_prepare=""
-	incremental=""
+	clean=""
 
-	while getopts m:isSpb name
+	while getopts m:i name
 	do
 	case $name in
-	i) incremental="-i"
-	  skip_prepare="-s" 
-	  ;;
-	s) skip_prepare="-s"
-	  ;;
-	p) skip_package="-p"
-	  ;;
-	S) skip_stage="-S"
-	  ;;
-	b) skip_build="-b"
+	c) clean=1
+	  shift
 	  ;;
 	?) usage
 	;;
 	esac
 	done
+	if [ "$1" = "clean" ]; then
+		cleanit
+		exit 0
+	fi
 
-	optind=$OPTIND
-
-	export skip_prepare
-	export skip_build
-	export skip_stage
-	export skip_package
-	export incremental
-	export optind
+	export clean
 }
 
 no_prefix() 
@@ -166,48 +151,6 @@ append_slash()
 	fi
 }
 
-isdebug()
-{
-	if [ $debug == "y" ]; then
-		echo "isdebug yes"
-		return 1
-	else
-		return 0
-	fi
-}
-
-autogen()
-{
-	cd $gatepath
-
-	if [ -a "autogen.sh" ]; then
-		./autogen.sh
-	else
-		automake --add-missing
-		autoreconf -f
-	fi
-}
-
-packageit1()
-{
-	comp=$1
-	msg "packaging ${comp}"
-	cd ${USERLAND_WS}/components/PKGDEFS/${comp}
-	mkdir -p ${USERLAND_WS}pkg
-	pkgproto ${USERLAND_WS}${staging}/${comp}= > proto
-	PKGPROTOFILE=${USERLAND_WS}components/PKGDEFS/${comp}/proto
-	echo "i pkginfo" >> $PKGPROTOFILE
-}	 
-
-packageit2()
-{
-	comp=$1
-	cd ${USERLAND_WS}components/PKGDEFS/${comp}
-	eval "sed 's/%BUILD/${BUILD}/g' pkginfo.in" > pkginfo
-	pkgmk -o -b ${USERLAND_WS}${staging}${comp} -f proto -d ${USERLAND_WS}pkg
-	rm -f pkginfo proto
-}
-
 if [ -d "${USERLAND_WS}" ] ; then
 	export USERLAND_WS=${USERLAND_WS}/
 fi
@@ -218,4 +161,13 @@ fi
 	exit 1
 }
 
-
+cleanit()
+{
+	msg "cleaning for component ${COMPONENT}"
+	cd $COMPONENT_DIR
+	rm -rf build $SRC_DIR
+	if [ ! "$COMPONENT_NOGENPKGPROTO" -eq 1 ]; then
+		rm -f pkgproto
+	fi
+	rm -f pkginfo
+}

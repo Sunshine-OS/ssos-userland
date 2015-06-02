@@ -1,0 +1,4 @@
+i pkginfo
+f none bin/ksh93=bin/ksh 0755 root wheel
+s none bin/ksh=/bin/ksh93
+f none usr/share/man/man1/ksh93.1=man/man1/sh.1 0644 root wheel
